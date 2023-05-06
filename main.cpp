@@ -5,10 +5,17 @@
 #include <set>
 #include <cstring>
 #include <algorithm>
+#include <cctype>
 #include "Trie.h"
 #include "TrieNode.h"
 #include "printSet.h"
 using namespace std;
+
+void to_lower(char* str) {
+    for(int i=0; i<strlen(str); i++) {
+        if(str[i] > 'z') str[i] = str[i] - 'A' + 'a';
+    }
+}
 
 int main(int argc, char** argv) {
     fstream corpus(argv[1]);
@@ -16,41 +23,67 @@ int main(int argc, char** argv) {
     int num;
     string sentence;
     Trie corpusTrie;
+    
     while(getline(corpus, sentence, '\n')) {
+
+
+        cout << "###" << sentence << endl;
+
+
+        char* charSentence = new char[sentence.length() + 1];
         char* sep = " ,\"'.?!()";
-        char* token = strtok(sentence.c_str, sep);
+        strcpy(charSentence, sentence.c_str());
+        char* token = strtok(charSentence, sep);
         num = stoi(token);
+
+        cout << num << endl;
+
+        
         token = strtok(NULL, sep);
         while(token != NULL) {
-            transform(token, token+strlen(token), token, tolower);
+            to_lower(token);
+            
+
+            cout << "***" << token << endl;
+
+
             corpusTrie.insertWord(token, num);
             token = strtok(NULL, sep);
         }
+        delete[] charSentence;
     }
+    
 
     
     while(getline(query, sentence, '\n')) {
+        char* charSentence1 = new char[sentence.length() + 1];
         //the first query
-        char* token = strtok(sentence.c_str, ' ');
-        transform(token, token+strlen(token), token, tolower);
+        strcpy(charSentence1, sentence.c_str());
+        char* token = strtok(charSentence1, " ");
+        to_lower(token);
         string strToken(token);
+
+
+        cout << "&&&" << strToken << endl;
+
+        
         set<int> word1 = corpusTrie.searchWord(strToken);
         //first query doesn't in corpus
-        if(a1.empty()) {
+        if(word1.empty()) {
             cout << "-1 " << endl;
             continue;
         }
 
         //the second query
-        token = strtok(NULL, ' ');
+        token = strtok(NULL, " ");
         //no second query -> print word1
         if(token == NULL) {
             printSet(word1);
             continue;
         }
 
-        transform(token, token+strlen(token), token, tolower);
-        strToken(token);
+        to_lower(token);
+        strToken = token;
         set<int> word2 = corpusTrie.searchWord(strToken);
         //second query doesn't in corpus
         if(word2.empty()) {
@@ -64,14 +97,14 @@ int main(int argc, char** argv) {
                          word2.begin(), word2.end(),
                          inserter(result, result.begin()));
         //no third query
-        token = strtok(NULL, ' ');
+        token = strtok(NULL, " ");
         if(token == NULL) {
             printSet(result);
             continue;
         }
 
-        transform(token, token+strlen(token), token, tolower);
-        strToken(token);
+        to_lower(token);
+        strToken = token;
         set<int> word3 = corpusTrie.searchWord(strToken);
         //third query doesn't in corpus
         if(word3.empty()) {
@@ -83,5 +116,8 @@ int main(int argc, char** argv) {
                          word3.begin(), word3.end(),
                          inserter(result, result.begin()));
         printSet(result);
+        delete[] charSentence1;
     }
+    
+    
 }

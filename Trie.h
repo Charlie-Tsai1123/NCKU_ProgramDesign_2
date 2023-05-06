@@ -1,4 +1,4 @@
-#ifndefTRIE_H
+#ifndef TRIE_H
 #define TRIE_H
 #include "TrieNode.h"
 #include <string>
@@ -28,7 +28,7 @@ class Trie {
                 if(curr->children.find(c) == curr->children.end()) {
                     return wrongAns;
                 }
-                curr = curr->children[c]
+                curr = curr->children[c];
             }
             return curr->isEndOfWord;
         }

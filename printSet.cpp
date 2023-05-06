@@ -1,4 +1,4 @@
-#include "prinSet.h"
+#include "printSet.h"
 
 void printSet(set<int> a) {
     for(auto &s: a) {

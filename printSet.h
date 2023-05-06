@@ -1,7 +1,8 @@
 #ifndef PRINSET_H
 #define PRINSET_H
 #include <set>
-
-void prinSet(set<int>);
+#include <iostream>
+using namespace std;
+void printSet(set<int>);
 
 #endif
