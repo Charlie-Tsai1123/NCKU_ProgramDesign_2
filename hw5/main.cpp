@@ -73,11 +73,6 @@ int main(int argc, char** argv) {
         transform(word.begin(), word.end(), word.begin(), [](unsigned char c){ return tolower(c); });
         set<int> thirdWord = corpusTrie.searchWord(word);
         if(thirdWord.empty()) {
-
-
-            cout << "test2" << endl;
-
-
             cout << "-1 " << endl;
             continue;
         }
