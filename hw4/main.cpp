@@ -1,0 +1,52 @@
+#include <iostream>
+#include <fstream>
+#include <algorithm>
+#include <string>
+#include <vector>
+#include <string.h>
+#include <ctime>
+#include <cstdlib>
+using namespace std;
+#include "Staff.h"
+#include "check.h"
+#include "MaxContinue.h"
+
+bool cmp(Staff, Staff);
+
+int main(int argc, char** argv) {
+    ifstream file(argv[1]);
+    if(!file.is_open()) {
+        cerr << "wrong!" << endl;
+        return 1;
+    }
+
+    //Input
+    vector<Staff> staff;
+    string str;
+    int employeeId1, sign1, timeYear1, timeMonth1, timeDay1, time1;
+    while(getline(file, str, ',')) {
+        employeeId1 = stoi(str);
+        getline(file, str, ',');
+        if(strcmp(str.c_str(), "sign-in") == 0) sign1 = 0;
+        else sign1 = 1;
+        getline(file, str);
+        staff.push_back(Staff(employeeId1, sign1, str));
+    }
+
+    //排序
+    sort(staff.begin(), staff.end(), cmp);
+    for(auto &v: staff) {
+        cout << v.employeeId << "," << v.sign << "," << v.strTime << endl;
+    }
+
+    //輸出
+    check(staff);
+
+}
+
+bool cmp(Staff x, Staff y) {
+    if(x.employeeId != y.employeeId) return x.employeeId < y.employeeId;
+    time_t xTime = mktime(&x.time);
+    time_t yTime = mktime(&y.time);
+    return xTime < yTime;
+}
