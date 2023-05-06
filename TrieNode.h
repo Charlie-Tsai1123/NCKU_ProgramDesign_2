@@ -2,13 +2,13 @@
 #define TRIENODE_H
 
 #include <unordered_map>
-#include <vector>
+#include <set>
 using namespace std;
 
 class TrieNode {
     public:
         unordered_map<char, TrieNode*> children;
-        vector<int> isEndOfWord;
+        set<int> isEndOfWord;
 };
 
 #endif

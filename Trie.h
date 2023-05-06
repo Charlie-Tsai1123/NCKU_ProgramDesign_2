@@ -18,12 +18,12 @@ class Trie {
                 }
                 curr = curr->children[c];
             }
-            curr->isEndOfWord.push_back(line);
+            curr->isEndOfWord.insert(line);
         }
 
-        vector<int> searchWord(string str) {
+        set<int> searchWord(string str) {
             TrieNode* curr = root;
-            vector<int> wrongAns;
+            set<int> wrongAns;
             for (char c: str) {
                 if(curr->children.find(c) == curr->children.end()) {
                     return wrongAns;
