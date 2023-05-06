@@ -2,7 +2,7 @@
 
 void printSet(set<int> a) {
     for(auto &s: a) {
-        cout << "a ";
+        cout << s << " ";
     }
     cout << endl;
 }
