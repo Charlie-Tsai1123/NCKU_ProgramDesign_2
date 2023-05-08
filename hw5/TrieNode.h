@@ -9,6 +9,9 @@ class TrieNode {
     public:
         unordered_map<char, TrieNode*> children;
         set<int> isEndOfWord;
+        TrieNode () {
+            isEndOfWord = {};
+        }
 };
 
 #endif

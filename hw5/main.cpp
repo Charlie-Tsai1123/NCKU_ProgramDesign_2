@@ -18,13 +18,14 @@ int main(int argc, char** argv) {
     fstream query(argv[2]);
     int num;
     string sentence, strNum;
-    Trie corpusTrie;
+    Trie corpusTrie = Trie();
     
     
     while(getline(corpus, strNum, ',')) {
         getline(corpus, sentence, '\n');
         //divide corpus and submit to Trie
-        insertCorpus(stoi(strNum), sentence, corpusTrie);
+        num = stoi(strNum);
+        insertCorpus(num, sentence, &corpusTrie);
     }
     
 

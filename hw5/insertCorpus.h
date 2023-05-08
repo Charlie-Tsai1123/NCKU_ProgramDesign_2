@@ -7,6 +7,6 @@
 
 using namespace std;
 
-void insertCorpus(int, string, Trie);
+void insertCorpus(int&, string&, Trie*);
 
 #endif
