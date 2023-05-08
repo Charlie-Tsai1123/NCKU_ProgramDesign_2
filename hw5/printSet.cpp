@@ -1,8 +1,9 @@
 #include "printSet.h"
 
 void printSet(set<int> a) {
-    for(auto &s: a) {
-        cout << s << " ";
+    auto s = a.begin();
+    for(; s != prev(a.end()); s++) {
+        cout << *s << " ";
     }
-    cout << endl;
+    cout << *s << endl;
 }

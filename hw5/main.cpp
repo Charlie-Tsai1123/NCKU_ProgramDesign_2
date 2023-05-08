@@ -39,7 +39,7 @@ int main(int argc, char** argv) {
         transform(word.begin(), word.end(), word.begin(), [](unsigned char c){ return tolower(c); });
         firstWord = corpusTrie.searchWord(word);
         if(firstWord.empty()) {
-            cout << "-1 " << endl;
+            cout << "-1" << endl;
             continue;
         }
 
@@ -54,7 +54,7 @@ int main(int argc, char** argv) {
         set<int> secondWord = corpusTrie.searchWord(word);
         //not found secondword in corpus
         if(secondWord.empty()) {
-            cout << "-1 " << endl;
+            cout << "-1" << endl;
             continue;
         }
         //found second word in corpus
@@ -73,7 +73,7 @@ int main(int argc, char** argv) {
         transform(word.begin(), word.end(), word.begin(), [](unsigned char c){ return tolower(c); });
         set<int> thirdWord = corpusTrie.searchWord(word);
         if(thirdWord.empty()) {
-            cout << "-1 " << endl;
+            cout << "-1" << endl;
             continue;
         }
         set<int>result3;
