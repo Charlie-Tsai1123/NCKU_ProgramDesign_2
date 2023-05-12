@@ -28,73 +28,50 @@ int main(int argc, char** argv) {
         insertCorpus(num, sentence, &corpusTrie);
     }
     
-
-    
     while(getline(query, sentence, '\n')) {
         string word;
         istringstream ss(sentence);
-        set<int> firstWord;
-        
-        //the first
+        set<int> findQuery;
+        set<int> result;
+        set<int> tmp;
+
         ss >> word;
-        transform(word.begin(), word.end(), word.begin(), [](unsigned char c){ return tolower(c); });
-        firstWord = corpusTrie.searchWord(word);
-        if(firstWord.empty()) {
-            cout << "-1" << endl;
-            continue;
-        }
-        word.clear();
+        transform(word.begin(), word.end(), word.begin(), [](unsigned char c) {return tolower(c);});
+        result = corpusTrie.searchWord(word);
 
-        //the second
-        
-        //the second doesn't exist
-        if(!(ss >> word)) {
-            printSet(firstWord);
-            continue;
-        }
-        transform(word.begin(), word.end(), word.begin(), [](unsigned char c){ return tolower(c); });
-        set<int> secondWord = corpusTrie.searchWord(word);
-        //not found secondword in corpus
-        if(secondWord.empty()) {
-            cout << "-1" << endl;
-            continue;
-        }
-        //found second word in corpus
-        set<int>result2;
-        set_intersection(firstWord.begin(), firstWord.end(),
-                        secondWord.begin(), secondWord.end(),
-                        inserter(result2, result2.begin()));
-        word.clear();
-
-        //the first and second doesn't have the same element
-        if(result2.empty()) {
+        //couldn't find the first query
+        if(result.empty()) {
             cout << "-1" << endl;
             continue;
         }
 
-        //the third
 
-        //the third word doesn't exist
-        if(!(ss >> word)) {
-            printSet(result2);
-            continue;
-        }
-        transform(word.begin(), word.end(), word.begin(), [](unsigned char c){ return tolower(c); });
-        set<int> thirdWord = corpusTrie.searchWord(word);
-        if(thirdWord.empty()) {
-            cout << "-1" << endl;
-            continue;
-        }
-        set<int>result3;
-        set_intersection(result2.begin(), result2.end(),
-                        thirdWord.begin(), thirdWord.end(),
-                        inserter(result3, result3.begin()));
+        bool isPrintSet = true;
+        while(ss >> word) {
+            transform(word.begin(), word.end(), word.begin(), [](unsigned char c){ return tolower(c); });
+            findQuery = corpusTrie.searchWord(word);
 
-        //result3 is empty means first second third doesn't have the seame element
-        if(result3.empty()) {
-            cout << "-1" << endl;
-            continue;
+            //couldn't find query
+            if(findQuery.empty()) {
+                isPrintSet = false;
+                break;
+            }
+
+            //intersection
+            tmp = result;
+            result.clear();
+            set_intersection(tmp.begin(), tmp.end(),
+                            findQuery.begin(), findQuery.end(),
+                            inserter(result, result.begin()));
+
+            //if doesn't have the same element
+            if(result.empty()) {
+                isPrintSet = false;
+                break;
+            }
         }
-        printSet(result3);     
+
+        if(isPrintSet) printSet(result);
+        else cout << "-1" << endl;   
     }
 }

@@ -16,7 +16,7 @@ class Trie {
             root = new TrieNode();
         }
 
-        void insertWord(string str, int line) {
+        void insertWord(string& str, int& line) {
             TrieNode* curr = root;
             for (char c: str) {
                 if(curr->children.find(c) == curr->children.end()) {
@@ -27,7 +27,7 @@ class Trie {
             curr->isEndOfWord.insert(line);
         }
 
-        set<int> searchWord(string str) {
+        set<int> searchWord(string& str) {
             TrieNode* curr = root;         
             set<int> wrongAns={};
             for (char c: str) {
