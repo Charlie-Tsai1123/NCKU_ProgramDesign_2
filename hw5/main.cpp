@@ -43,6 +43,7 @@ int main(int argc, char** argv) {
             cout << "-1" << endl;
             continue;
         }
+        word.clear();
 
         //the second
         
@@ -63,6 +64,13 @@ int main(int argc, char** argv) {
         set_intersection(firstWord.begin(), firstWord.end(),
                         secondWord.begin(), secondWord.end(),
                         inserter(result2, result2.begin()));
+        word.clear();
+
+        //the first and second doesn't have the same element
+        if(result2.empty()) {
+            cout << "-1" << endl;
+            continue;
+        }
 
         //the third
 
@@ -81,6 +89,12 @@ int main(int argc, char** argv) {
         set_intersection(result2.begin(), result2.end(),
                         thirdWord.begin(), thirdWord.end(),
                         inserter(result3, result3.begin()));
-        printSet(result3);
+
+        //result3 is empty means first second third doesn't have the seame element
+        if(result3.empty()) {
+            cout << "-1" << endl;
+            continue;
+        }
+        printSet(result3);     
     }
 }

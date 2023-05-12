@@ -2,6 +2,12 @@
 #define TRIE_H
 #include "TrieNode.h"
 #include <string>
+
+
+#include <iostream>
+
+
+
 using namespace std;
 class Trie {
     public:
@@ -22,8 +28,8 @@ class Trie {
         }
 
         set<int> searchWord(string str) {
-            TrieNode* curr = root;
-            set<int> wrongAns;
+            TrieNode* curr = root;         
+            set<int> wrongAns={};
             for (char c: str) {
                 if(curr->children.find(c) == curr->children.end()) {
                     return wrongAns;

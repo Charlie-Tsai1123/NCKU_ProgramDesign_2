@@ -3,6 +3,6 @@
 #include <set>
 #include <iostream>
 using namespace std;
-void printSet(set<int>);
+void printSet(set<int>&);
 
 #endif
