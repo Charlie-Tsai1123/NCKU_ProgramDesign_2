@@ -1,0 +1,7 @@
+{
+    //Power Mode
+    "powermode.enabled": true,
+    "files.associations": {
+        "ostream": "cpp"
+    }
+}

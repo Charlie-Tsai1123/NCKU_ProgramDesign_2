@@ -11,13 +11,11 @@
 #include <vector>
 #include "Trie.h"
 #include "TrieNode.h"
-#include "printSet.h"
 #include "insertCorpus.h"
-#include "IdfRank.h"
 using namespace std;
 
-inline double IDF(int, int);
-bool cmp(int, int);
+inline double IDF(int&, int&);
+bool cmp(const pair<int, int>&, const pair<int, int>&);
 
 int main(int argc, char** argv) {
     fstream corpus(argv[1]);
@@ -26,7 +24,7 @@ int main(int argc, char** argv) {
     string sentence, strNum, findSentence;
     Trie corpusTrie = Trie();
     
-    
+    //Insert Corpus
     while(getline(corpus, strNum, ',')) {
         getline(corpus, sentence, '\n');
         //divide corpus and submit to Trie
@@ -35,37 +33,86 @@ int main(int argc, char** argv) {
         numOfCorpus++;
     }
 
-    map<int, int> ans; // the number of line, idf sum
-    //ans.reserve(numOfCorpus);
-
     while(getline(query, findSentence, '\n')) {
         string word;
         istringstream ss(findSentence);
-        int IDFvalue, frequency = 0;
+        double IDFvalue;
+        int frequency = 0;
+        map<int, double> ans; // the number of line, idf sum
 
         while(ss >> word) {
+            transform(word.begin(), word.end(), word.begin(), [](unsigned char c){ return tolower(c); }); //letter tolower
+            if(corpusTrie.searchWord(word).empty()) continue;
             frequency = corpusTrie.searchWord(word).size();
             IDFvalue = IDF(numOfCorpus, frequency);
+
+            //Calculate IDFvalue of the word & Calculate the sum of IDFvalue in each line
+            if (IDFvalue == 0) continue;
             for(int a: corpusTrie.searchWord(word)) {
                 if(ans.find(a) == ans.end()) {
-                    ans[a] = 0;
+                    ans[a] = IDFvalue;
                 }else {
                     ans[a] += IDFvalue;
                 }
             }
         }
 
-        vector<pair<int, int>> ansRank(ans.begin(), ans.end());
+        //Copy map to vector because i want to sort by the value of map
+        vector<pair<int, double>> ansRank(ans.begin(), ans.end());
+
+        //*******************check vector
+        /*
+        for(const auto pair: ansRank) {
+            cout << "&&&";
+            cout << pair.first << "-->" << pair.second << endl;
+        }
+        */
+
         sort(ansRank.begin(), ansRank.end(), cmp);
 
-        cout << ansRank[0].first << " " << ansRank[1].first << " " << ansRank[2].first;
-        
-    }
+        //Print the answer
+        int numOfAns = 3;
+        for(auto a: ansRank) {
+            if(numOfAns != 3) cout << " ";
+            if(a.second == 0) {
+                cout << -1;
+            }else {
+                cout << a.first;
+            }
+            
+            numOfAns--;
+            if(numOfAns == 0) break;
+        }
 
-    
-        
+        //cout << "\n" << "*" << numOfAns << endl;
+
+        if(numOfAns == 3) {
+            cout << -1;
+            numOfAns--;
+        }
+        for(int i=0; i<numOfAns; i++) {
+            cout << " " << -1;
+        }
+
+        cout << endl;
+
+        ans.clear();
+        ansRank.clear();
+       //******************
+       //cout << "***************************" << endl;
+    }   
 }
 
-inline double IDF(int numberOfCorpus, int frequency) {
+//calculate IDF of word
+inline double IDF(int& numberOfCorpus, int& frequency) {
+    if(frequency == 0) return 0;
     return log((double)numberOfCorpus/frequency);
+}
+
+//compare funtion for sort vector
+bool cmp(const pair<int, int>& a, const pair<int, int>& b) {
+    if(a.second == b.second) {
+        return a.first < b.first;
+    }
+    return a.second > b.second;
 }
