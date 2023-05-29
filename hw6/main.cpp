@@ -15,7 +15,7 @@
 using namespace std;
 
 inline double IDF(int&, int&);
-bool cmp(const pair<int, int>&, const pair<int, int>&);
+bool cmp(const pair<int, double>&, const pair<int, double>&);
 
 int main(int argc, char** argv) {
     fstream corpus(argv[1]);
@@ -98,7 +98,7 @@ inline double IDF(int& numberOfCorpus, int& frequency) {
 }
 
 //compare funtion for sort vector
-bool cmp(const pair<int, int>& a, const pair<int, int>& b) {
+bool cmp(const pair<int, double>& a, const pair<int, double>& b) {
     if(a.second == b.second) {
         return a.first < b.first;
     }
