@@ -20,6 +20,8 @@ bool cmp(const pair<int, int>&, const pair<int, int>&);
 int main(int argc, char** argv) {
     fstream corpus(argv[1]);
     fstream query(argv[2]);
+    int topNum = atoi(argv[3]);
+
     int num, numOfCorpus = 0;
     string sentence, strNum, findSentence;
     Trie corpusTrie = Trie();
@@ -71,27 +73,13 @@ int main(int argc, char** argv) {
         sort(ansRank.begin(), ansRank.end(), cmp);
 
         //Print the answer
-        int numOfAns = 3;
-        for(auto a: ansRank) {
-            if(numOfAns != 3) cout << " ";
-            if(a.second == 0) {
-                cout << -1;
-            }else {
-                cout << a.first;
-            }
-            
-            numOfAns--;
-            if(numOfAns == 0) break;
+        for(int i = ansRank.size(); i<topNum; i++) {
+            ansRank.push_back(make_pair(-1, 0));
         }
-
-        //cout << "\n" << "*" << numOfAns << endl;
-
-        if(numOfAns == 3) {
-            cout << -1;
-            numOfAns--;
-        }
-        for(int i=0; i<numOfAns; i++) {
-            cout << " " << -1;
+        
+        for(int i=0; i<topNum; i++) {
+            if(i == 0) cout << ansRank[0].first;
+            else cout << " " << ansRank[i].first; 
         }
 
         cout << endl;
