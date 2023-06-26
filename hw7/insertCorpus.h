@@ -2,11 +2,12 @@
 #define INSERCORPUS_H
 #include "Trie.h"
 #include "TrieNode.h"
+#include "isEndOfWord.h"
 #include <string>
 #include <algorithm>
 
 using namespace std;
 
-void insertCorpus(int&, string&, Trie*);
+int insertCorpus(int&, string&, Trie*);
 
 #endif

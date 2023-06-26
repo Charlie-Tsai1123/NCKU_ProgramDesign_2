@@ -1,7 +1,10 @@
 #ifndef TRIE_H
 #define TRIE_H
 #include "TrieNode.h"
+#include "isEndOfWord.h"
 #include <string>
+
+
 #include <iostream>
 
 
@@ -16,23 +19,25 @@ class Trie {
 
         void insertWord(string& str, int& line) {
             TrieNode* curr = root;
+            int isFirst = 1;
             for (char c: str) {
                 if(curr->children.find(c) == curr->children.end()) {
                     curr->children[c] = new TrieNode();
                 }
                 curr = curr->children[c];
             }
-            //isEndOfWord -> set
-            //curr->isEndOfWord.insert(line);
-
-            //isEndOfWord -> map
-            if(curr->isEndOfWord.find(line) == curr->isEndOfWord.end()) curr->isEndOfWord[line] = 0;
-            else curr->isEndOfWord[line]++;
+            if(isFirst == 1) {
+                isFirst == 0;
+                curr->isEndOfWord.frequency[line] = 1;
+            }
+            curr->isEndOfWord.frequency[line]++;
+            curr->isEndOfWord.line.insert(line);
         }
 
-        map<int, int> searchWord(string& str) {
+        struct IsEndOfWord searchWord(string& str) {
             TrieNode* curr = root;         
-            map<int, int> wrongAns;
+            struct IsEndOfWord wrongAns;
+            wrongAns.line = {};
             for (char c: str) {
                 if(curr->children.find(c) == curr->children.end()) {
                     return wrongAns;
