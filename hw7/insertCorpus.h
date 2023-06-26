@@ -5,6 +5,7 @@
 #include "isEndOfWord.h"
 #include <string>
 #include <algorithm>
+#include <map>
 
 using namespace std;
 

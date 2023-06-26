@@ -44,12 +44,11 @@ int main(int argc, char** argv) {
         //^^modified^^^^^^^^^^^^^^^^
         map<int, vector<pair<double, double>>> tempAns; //line, idf, idf*new_tf;
         map<int, double> ans; // the number of line, idf*tf sum
+        set<int> considerLine;
         //^modifed^^^^^^^^^^^^^^^^^^
 
         string word;
         istringstream ss(findSentence);
-        double IDFvalue; //^^^^^^^^
-        int frequency = 0; //^^^^^^^^^^^^^^
         
 
         //^^^^^^^^becareful tempAns[line] may less than three cases.
@@ -60,44 +59,74 @@ int main(int argc, char** argv) {
             
             //calculate idf
             double idf = IDF(numOfCorpus, wordMessage.line.size());
+
+            //@@@@@@@@
+            //cout << word << " : " << idf << endl;
+            //@@@@@@@
+
+
             if(idf == 0) continue;
 
             //store idf and new_tf in tempAns
             for(int i: wordMessage.line) {
                 double new_tf = New_tf(allOfWord[i], wordMessage.frequency[i]);
-                tempAns[i].push_back(make_pair(idf, new_tf));
+
+                //@@@@@@@@
+                //cout << " " << i << ": "  << new_tf << " ";
+                //@@@@@@@@
+
+                tempAns[i].push_back(make_pair(idf, idf*new_tf));
+                considerLine.insert(i);
             }
 
-/*
-            //Calculate IDFvalue of the word & Calculate the sum of IDFvalue in each line
-            for(struct IsEndOfWord a: corpusTrie.searchWord(word)) {
-                if(ans.find(a) == ans.end()) {
-                    ans[a] = IDFvalue;
-                }else {
-                    ans[a] += IDFvalue;
-                }
-            }
-*/
+            //@@@@
+            //cout << endl;
+            //@@@@
+
         }
+        
 
-        for(int i=0; i<numOfCorpus+1; i++) {
+        //@@@@@@@@@@@@@
+        /*
+        for(int i: considerLine) {
             if(tempAns.find(i) == tempAns.end()) continue;
-            for(int j = 0; j<3-tempAns[i].size(); j++) tempAns[i].push_back(make_pair(0, 0)); 
+            for(auto j: tempAns[i]) {
+                cout << "line: " << i << "; idf: " << j.first << "; new_tf: " << j.second << endl;
+            }
+        }
+        
+        for(auto j: tempAns[44041]) {
+            cout << "idf: " << j.first << "; new_tf: " << j.second << endl;
+        }
+        */
+
+
+        for(int i: considerLine) {
+            if(tempAns.find(i) == tempAns.end()) continue;
+            for(int j = 0; j<4-tempAns[i].size(); j++) tempAns[i].push_back(make_pair(0, 0)); 
             sort(tempAns[i].begin(), tempAns[i].end(), cmpIdfNew_tf);
             ans[i] = 0;
             ans[i] += tempAns[i][0].second + tempAns[i][1].second + tempAns[i][2].second;
+            
+            //@@@@@@@@@
+            //cout << "line: " << i << "; value: " << ans[i] << endl;
+            //cout << "---> idf: " << tempAns[i][0].first << "; new_tf: " << tempAns[i][0].second << endl; 
+            //cout << "---> idf: " << tempAns[i][1].first << "; new_tf: " << tempAns[i][1].second << endl; 
+            //cout << "---> idf: " << tempAns[i][2].first << "; new_tf: " << tempAns[i][2].second << endl; 
+            //@@@@@@@@@
+
         }
 
         //Copy map to vector because i want to sort by the value of map
         vector<pair<int, double>> ansRank(ans.begin(), ans.end());
 
         //*******************check vector
-        /*
-        for(const auto pair: ansRank) {
-            cout << "&&&";
-            cout << pair.first << "-->" << pair.second << endl;
-        }
-        */
+        
+        //for(const auto pair: ansRank) {
+        //    cout << "&&&";
+        //    cout << pair.first << "-->" << pair.second << endl;
+        //}
+        
 
         sort(ansRank.begin(), ansRank.end(), cmp);
 
@@ -117,6 +146,8 @@ int main(int argc, char** argv) {
         ansRank.clear();
        //******************
        //cout << "***************************" << endl;
+
+
     }   
 }
 
@@ -128,7 +159,7 @@ inline double IDF(const int& numberOfCorpus, const int& frequency) {
 
 //calculate new_tf of word
 inline double New_tf(int &a, int &b) {
-    return (double)a/b;
+    return (double)b/a;
 }
 
 //sort function for tempAns (by 1. idf && 2. new_tf)

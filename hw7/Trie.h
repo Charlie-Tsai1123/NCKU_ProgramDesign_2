@@ -17,19 +17,15 @@ class Trie {
             root = new TrieNode();
         }
 
-        void insertWord(string& str, int& line) {
+        void insertWord(string& str, int& line, int isFirst) {
             TrieNode* curr = root;
-            int isFirst = 1;
             for (char c: str) {
                 if(curr->children.find(c) == curr->children.end()) {
                     curr->children[c] = new TrieNode();
                 }
                 curr = curr->children[c];
             }
-            if(isFirst == 1) {
-                isFirst == 0;
-                curr->isEndOfWord.frequency[line] = 1;
-            }
+            if(isFirst == 1) curr->isEndOfWord.frequency[line] = 0;
             curr->isEndOfWord.frequency[line]++;
             curr->isEndOfWord.line.insert(line);
         }
